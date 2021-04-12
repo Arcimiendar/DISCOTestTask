@@ -13,30 +13,26 @@ from django.conf import settings
 
 def get_non_blank_frame(video_path: str) -> Union[np.ndarray, None]:
     last_analized_frame = None
-    with suppress(Exception):  # if there is any error that means video file is not valid
+    with suppress(Exception):
         cap = cv2.VideoCapture(video_path)
 
         cap.set(cv2.CAP_PROP_POS_AVI_RATIO, 1)  # seek end
-        number_of_frames = cap.get(cv2.CAP_PROP_POS_FRAMES)  # count frames
+        number_of_frames = cap.get(cv2.CAP_PROP_POS_FRAMES)
 
         while number_of_frames >= 0:
             number_of_frames -= 1
-            cap.set(cv2.CAP_PROP_POS_FRAMES, number_of_frames)  # get frame with index number_of_frames
+            cap.set(cv2.CAP_PROP_POS_FRAMES, number_of_frames)
             ret, frame = cap.read()
             if not ret:
                 break
 
-            counts, bins = np.histogram(frame)  # count distribution of colors
-            max_value = counts.max()  # max distribution of similar colors
-            sum_of_distribution_of_other_colors = sum(counts) - max_value  # sum of distribution others colors
+            last_analized_frame = frame
+            counts, bins = np.histogram(last_analized_frame)
+            max_value = counts.max()
+            sum_of_distribution_of_other_colors = sum(counts) - max_value
 
             if sum_of_distribution_of_other_colors > max_value:  # if there is no dominant color
-                # unfortunatly it won't work for pure noise
-                # may be try to convolve it with low-frequency filter to eliminate noises?
-                last_analized_frame = frame
                 break
-
-            last_analized_frame = frame
 
         cap.release()
 

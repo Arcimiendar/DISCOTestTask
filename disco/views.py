@@ -9,7 +9,6 @@ from disco.utils import extract_last_non_blank_frame
 
 
 def empty_trash(request):
-
     cutoff = now() - timedelta(days=settings.TRASH_DAYS)
     models = (
         Track, Playlist, PlaylistVersion, TrackComment,
