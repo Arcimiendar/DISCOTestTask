@@ -2,3 +2,6 @@ asgiref==3.3.4
 Django==3.2
 pytz==2021.1
 sqlparse==0.4.1
+opencv-python==4.5.1.48
+matplotlib==3.4.1
+numpy~=1.20.2
