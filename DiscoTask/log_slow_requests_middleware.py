@@ -23,8 +23,8 @@ class LogSlowRequestsMiddleware:
 
         if duration > self.time_limit_for_request:
             logger.warning(
-                f'{request.method} {request.path} '
-                f'GET: {dict(request.GET)} POST: {dict(request.POST)} request took {int(duration)} seconds'
+                f'{request.method} {request.path} GET params: {dict(request.GET)} POST params: {dict(request.POST)} '
+                f'request took {int(duration)} seconds'
             )
 
         return response

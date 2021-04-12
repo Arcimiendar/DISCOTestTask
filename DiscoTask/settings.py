@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'disco',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +129,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TIME_LIMIT_FOR_REQUEST_BE_LOGGED = 10
+TRASH_DAYS = 1
+TRASH_BATCH_SIZE = 10
