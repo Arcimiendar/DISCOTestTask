@@ -32,6 +32,7 @@ def get_non_blank_frame(video_path: str) -> Union[np.ndarray, None]:
 
             if sum_of_distribution_of_other_colors > max_value:  # if there is no dominant color
                 # unfortunatly it won't work for pure noise
+                # may be try to convolve it with low-frequency filter to eliminate noises?
                 last_analized_frame = frame
                 break
 
