@@ -30,6 +30,31 @@ class TrackComment(SoftDeleteMixin):
     text = models.TextField(max_length=250)
 
 
+class Business(models.Model):
+    hostname = models.CharField(max_length=20)
+
+
+class Artwork(models.Model):
+    album = models.CharField(max_length=20)
+    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name='artwork')
+
+
 class Track(SoftDeleteMixin):
     title = models.CharField(max_length=20)
-    track_comment = models.ForeignKey(TrackComment, on_delete=models.CASCADE, related_name='track')
+    artwork = models.ForeignKey(Artwork, on_delete=models.CASCADE, related_name='track')
+    comment = models.ForeignKey(TrackComment, on_delete=models.CASCADE, related_name='track')
+    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name='track')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='track')
+    artist = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
+
+
+class EventObject(models.Model):
+    event_object_track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name='eventobjects')
+
+
+class Event(models.Model):
+    name = models.CharField(max_length=20)
+    timestamp = models.DateTimeField()
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='event')
+    event_object = models.ForeignKey(EventObject, on_delete=models.CASCADE, related_name='event')
