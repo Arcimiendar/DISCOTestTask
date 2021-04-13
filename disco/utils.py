@@ -12,6 +12,8 @@ from itertools import combinations
 from matplotlib import pyplot as plt
 
 from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 
 
 logger = logging.getLogger(__name__)
@@ -49,10 +51,11 @@ def save_img(frame: Union[np.ndarray, None]):
     if frame is not None:
         random_sequence = str(uuid.uuid4())
         date = datetime.now()
-        new_path = os.path.join(
-            settings.MEDIA_ROOT, date.strftime('%Y'), date.strftime('%m'), date.strftime('%d'), 'disco'
+        new_path = default_storage.path(
+            f"temp_folder/{date.strftime('%Y')}, {date.strftime('%m')}, {date.strftime('%d')}"
         )
-        os.makedirs(os.path.join(f'{settings.MEDIA_ROOT}', new_path), exist_ok=True)
+
+        os.makedirs(os.path.join(new_path), exist_ok=True)
         plt.imsave(os.path.join(new_path, f"{random_sequence}-last_non_blank_frame.jpg"), frame)
 
 
