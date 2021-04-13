@@ -9,10 +9,10 @@ from django.conf import settings
 
 
 from disco.models import Track, Playlist, PlaylistVersion, TrackComment
-from disco.utils import extract_last_non_blank_frame
+from disco.utils import extract_last_non_blank_frame, truncate_filename
 
 
-def empty_trash(request):
+def empty_trash_view(request):
     cutoff = now() - timedelta(days=settings.TRASH_DAYS)
     models = (
         Track, Playlist, PlaylistVersion, TrackComment,
@@ -30,12 +30,21 @@ def empty_trash(request):
     return HttpResponse(f'hard deleted {count_work}')
 
 
-def extract_thumbnail_from_videofile(request):
+def extract_thumbnail_from_videofile_view(request):
     extract_last_non_blank_frame(request.GET['videopath'])
     return HttpResponse(f'ok')
 
 
-def tracks(request):
+def truncate_filename_view(request):
+    filename = request.GET['filename']
+    max_length = int(request.GET['max_length'])
+    truncated = truncate_filename(filename, max_length)
+    if truncated is None:
+        return HttpResponse(f'truncation for {filename} with length {max_length} is not possible')
+    return HttpResponse(truncated)
+
+
+def tracks_view(request):
     if 'sort' in request.GET:
         sort = json.loads(request.GET['sort'])
     else:
